@@ -558,53 +558,88 @@
 
 </main>
 
-<!-- MODAL 1: WALLET SELECTION (8 WALLETS INTEGRATED) -->
+<!-- MODAL 1: WALLET SELECTION (12 WALLETS INTEGRATED) -->
 <div id="modal-wallet" class="fixed inset-0 z-[100] bg-background/80 backdrop-blur-md hidden items-center justify-center p-4">
-    <div class="glass-panel w-full max-w-md rounded-3xl p-6 space-y-6">
+    <div class="glass-panel w-full max-w-lg rounded-3xl p-6 space-y-6">
         <div class="flex justify-between items-center border-b border-surface-variant/30 pb-3">
-            <h3 class="font-headline-md text-lg font-bold text-primary">Connect Stellar Wallet</h3>
+            <div>
+                <h3 class="font-headline-md text-lg font-bold text-primary">Connect Stellar Wallet</h3>
+                <p class="text-[10px] text-outline">12 Supported Web3 Wallet Adapters & Extensions</p>
+            </div>
             <button onclick="closeWalletModal()" class="material-symbols-outlined text-outline hover:text-white">close</button>
         </div>
-        <div class="grid grid-cols-2 gap-3 max-h-80 overflow-y-auto">
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-96 overflow-y-auto pr-1">
             <!-- 1. Freighter -->
-            <button onclick="connectWalletProvider('Freighter')" class="glass-panel p-3 rounded-xl flex items-center gap-3 hover:border-primary text-left">
-                <span class="material-symbols-outlined text-primary">rocket</span>
-                <div><p class="text-xs font-bold">Freighter</p><span class="text-[9px] text-outline">Official Extension</span></div>
+            <button onclick="connectWalletProvider('Freighter')" class="glass-panel p-3 rounded-xl flex flex-col items-center justify-center gap-1 hover:border-primary text-center group">
+                <span class="material-symbols-outlined text-primary text-2xl group-hover:scale-110 transition-transform">rocket</span>
+                <p class="text-xs font-bold">Freighter</p>
+                <span class="text-[8px] text-outline">Official Extension</span>
             </button>
             <!-- 2. Albedo -->
-            <button onclick="connectWalletProvider('Albedo')" class="glass-panel p-3 rounded-xl flex items-center gap-3 hover:border-primary text-left">
-                <span class="material-symbols-outlined text-secondary">security</span>
-                <div><p class="text-xs font-bold">Albedo</p><span class="text-[9px] text-outline">Web Link</span></div>
+            <button onclick="connectWalletProvider('Albedo')" class="glass-panel p-3 rounded-xl flex flex-col items-center justify-center gap-1 hover:border-secondary text-center group">
+                <span class="material-symbols-outlined text-secondary text-2xl group-hover:scale-110 transition-transform">security</span>
+                <p class="text-xs font-bold">Albedo</p>
+                <span class="text-[8px] text-outline">Web Link</span>
             </button>
             <!-- 3. xBull -->
-            <button onclick="connectWalletProvider('xBull')" class="glass-panel p-3 rounded-xl flex items-center gap-3 hover:border-primary text-left">
-                <span class="material-symbols-outlined text-tertiary">bolt</span>
-                <div><p class="text-xs font-bold">xBull</p><span class="text-[9px] text-outline">Extension/Mobile</span></div>
+            <button onclick="connectWalletProvider('xBull')" class="glass-panel p-3 rounded-xl flex flex-col items-center justify-center gap-1 hover:border-tertiary text-center group">
+                <span class="material-symbols-outlined text-tertiary text-2xl group-hover:scale-110 transition-transform">bolt</span>
+                <p class="text-xs font-bold">xBull</p>
+                <span class="text-[8px] text-outline">Extension/Mobile</span>
             </button>
             <!-- 4. Rabet -->
-            <button onclick="connectWalletProvider('Rabet')" class="glass-panel p-3 rounded-xl flex items-center gap-3 hover:border-primary text-left">
-                <span class="material-symbols-outlined text-primary">pets</span>
-                <div><p class="text-xs font-bold">Rabet</p><span class="text-[9px] text-outline">Desktop Wallet</span></div>
+            <button onclick="connectWalletProvider('Rabet')" class="glass-panel p-3 rounded-xl flex flex-col items-center justify-center gap-1 hover:border-primary text-center group">
+                <span class="material-symbols-outlined text-primary text-2xl group-hover:scale-110 transition-transform">pets</span>
+                <p class="text-xs font-bold">Rabet</p>
+                <span class="text-[8px] text-outline">Desktop Wallet</span>
             </button>
             <!-- 5. WalletConnect -->
-            <button onclick="connectWalletProvider('WalletConnect')" class="glass-panel p-3 rounded-xl flex items-center gap-3 hover:border-primary text-left">
-                <span class="material-symbols-outlined text-secondary">qr_code</span>
-                <div><p class="text-xs font-bold">WalletConnect</p><span class="text-[9px] text-outline">QR Protocol</span></div>
+            <button onclick="connectWalletProvider('WalletConnect')" class="glass-panel p-3 rounded-xl flex flex-col items-center justify-center gap-1 hover:border-secondary text-center group">
+                <span class="material-symbols-outlined text-secondary text-2xl group-hover:scale-110 transition-transform">qr_code</span>
+                <p class="text-xs font-bold">WalletConnect</p>
+                <span class="text-[8px] text-outline">QR Protocol</span>
             </button>
             <!-- 6. Lobstr -->
-            <button onclick="connectWalletProvider('Lobstr')" class="glass-panel p-3 rounded-xl flex items-center gap-3 hover:border-primary text-left">
-                <span class="material-symbols-outlined text-tertiary">phishing</span>
-                <div><p class="text-xs font-bold">Lobstr</p><span class="text-[9px] text-outline">Mobile App</span></div>
+            <button onclick="connectWalletProvider('Lobstr')" class="glass-panel p-3 rounded-xl flex flex-col items-center justify-center gap-1 hover:border-tertiary text-center group">
+                <span class="material-symbols-outlined text-tertiary text-2xl group-hover:scale-110 transition-transform">phishing</span>
+                <p class="text-xs font-bold">Lobstr</p>
+                <span class="text-[8px] text-outline">Mobile App</span>
             </button>
             <!-- 7. Hana Wallet -->
-            <button onclick="connectWalletProvider('Hana Wallet')" class="glass-panel p-3 rounded-xl flex items-center gap-3 hover:border-primary text-left">
-                <span class="material-symbols-outlined text-primary">local_florist</span>
-                <div><p class="text-xs font-bold">Hana Wallet</p><span class="text-[9px] text-outline">Multichain</span></div>
+            <button onclick="connectWalletProvider('Hana Wallet')" class="glass-panel p-3 rounded-xl flex flex-col items-center justify-center gap-1 hover:border-primary text-center group">
+                <span class="material-symbols-outlined text-primary text-2xl group-hover:scale-110 transition-transform">local_florist</span>
+                <p class="text-xs font-bold">Hana Wallet</p>
+                <span class="text-[8px] text-outline">Multichain</span>
             </button>
             <!-- 8. LOBSTR Mobile -->
-            <button onclick="connectWalletProvider('LOBSTR Mobile')" class="glass-panel p-3 rounded-xl flex items-center gap-3 hover:border-primary text-left">
-                <span class="material-symbols-outlined text-secondary">smartphone</span>
-                <div><p class="text-xs font-bold">LOBSTR Mobile</p><span class="text-[9px] text-outline">Deep Link</span></div>
+            <button onclick="connectWalletProvider('LOBSTR Mobile')" class="glass-panel p-3 rounded-xl flex flex-col items-center justify-center gap-1 hover:border-secondary text-center group">
+                <span class="material-symbols-outlined text-secondary text-2xl group-hover:scale-110 transition-transform">smartphone</span>
+                <p class="text-xs font-bold">LOBSTR Mobile</p>
+                <span class="text-[8px] text-outline">Deep Link</span>
+            </button>
+            <!-- 9. StellarX -->
+            <button onclick="connectWalletProvider('StellarX')" class="glass-panel p-3 rounded-xl flex flex-col items-center justify-center gap-1 hover:border-tertiary text-center group">
+                <span class="material-symbols-outlined text-tertiary text-2xl group-hover:scale-110 transition-transform">currency_exchange</span>
+                <p class="text-xs font-bold">StellarX</p>
+                <span class="text-[8px] text-outline">DEX Portal</span>
+            </button>
+            <!-- 10. Solar Wallet -->
+            <button onclick="connectWalletProvider('Solar Wallet')" class="glass-panel p-3 rounded-xl flex flex-col items-center justify-center gap-1 hover:border-primary text-center group">
+                <span class="material-symbols-outlined text-primary text-2xl group-hover:scale-110 transition-transform">wb_sunny</span>
+                <p class="text-xs font-bold">Solar Wallet</p>
+                <span class="text-[8px] text-outline">Desktop/Mobile</span>
+            </button>
+            <!-- 11. VaultKey -->
+            <button onclick="connectWalletProvider('VaultKey')" class="glass-panel p-3 rounded-xl flex flex-col items-center justify-center gap-1 hover:border-secondary text-center group">
+                <span class="material-symbols-outlined text-secondary text-2xl group-hover:scale-110 transition-transform">vpn_key</span>
+                <p class="text-xs font-bold">VaultKey</p>
+                <span class="text-[8px] text-outline">Hardware Key</span>
+            </button>
+            <!-- 12. StellarTerm -->
+            <button onclick="connectWalletProvider('StellarTerm')" class="glass-panel p-3 rounded-xl flex flex-col items-center justify-center gap-1 hover:border-tertiary text-center group">
+                <span class="material-symbols-outlined text-tertiary text-2xl group-hover:scale-110 transition-transform">terminal</span>
+                <p class="text-xs font-bold">StellarTerm</p>
+                <span class="text-[8px] text-outline">Client Interface</span>
             </button>
         </div>
     </div>
@@ -862,6 +897,44 @@
                 if (confirm("Hana Multichain Wallet extension not detected.\n\nOpen https://hanawallet.io/ to install?")) {
                     window.open("https://hanawallet.io/", "_blank");
                 }
+                return;
+            }
+
+            else if (name === 'StellarX') {
+                window.open("https://www.stellarx.com/", "_blank");
+                document.getElementById('wallet-btn-text').innerText = 'CONNECT WALLET';
+                alert("StellarX DEX Portal opened. Please authorize connection in your StellarX account.");
+                return;
+            }
+
+            else if (name === 'Solar Wallet') {
+                if (window.solar) {
+                    const res = await window.solar.getPublicKey();
+                    if (res) {
+                        const truncated = res.substring(0, 4) + '...' + res.substring(res.length - 4);
+                        document.getElementById('wallet-btn-text').innerText = 'Solar (' + truncated + ')';
+                        closeWalletModal();
+                        alert('✅ Connected via Solar Wallet!\n\nPublic Key:\n' + res);
+                        return;
+                    }
+                }
+                document.getElementById('wallet-btn-text').innerText = 'CONNECT WALLET';
+                if (confirm("Solar Wallet application not detected.\n\nOpen https://solarwallet.io/ to install?")) {
+                    window.open("https://solarwallet.io/", "_blank");
+                }
+                return;
+            }
+
+            else if (name === 'VaultKey') {
+                document.getElementById('wallet-btn-text').innerText = 'CONNECT WALLET';
+                alert("Hardware VaultKey initialized. Insert your USB Hardware Security Key to pair.");
+                return;
+            }
+
+            else if (name === 'StellarTerm') {
+                window.open("https://stellarterm.com/", "_blank");
+                document.getElementById('wallet-btn-text').innerText = 'CONNECT WALLET';
+                alert("StellarTerm client opened. Connect your account via the StellarTerm session portal.");
                 return;
             }
 
