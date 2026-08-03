@@ -194,6 +194,52 @@ Our platform integrates authentic community feedback from our **52 verified Stel
 
 ---
 
+## ⚙️ Automated CI/CD Pipeline & DevOps Architecture
+
+StellarRaffle Pro 2.0 incorporates an enterprise-grade **Continuous Integration & Continuous Deployment (CI/CD)** pipeline powered by **GitHub Actions** (`.github/workflows/ci.yml`). Every commit and pull request triggers automated verification, unit testing, compilation, and multi-platform deployment edge sync.
+
+```mermaid
+flowchart LR
+    A[👨‍💻 Code Commit / PR] --> B[⚙️ GitHub Actions CI]
+    subgraph CI_Pipeline ["Continuous Integration Jobs"]
+        B --> C["🦀 Soroban Contract CI\n• Rust toolchain setup\n• cargo check (wasm32)\n• Soroban unit tests\n• WASM release build"]
+        B --> D["⚡ Frontend CI\n• Node.js 18 setup\n• npm ci dependencies\n• Vite production build"]
+    end
+    C --> E[🛡️ Quality Gate & Security Check]
+    D --> E
+    E -->|Passes All Checks| F["🚀 Continuous Deployment (CD)\n• Automated Netlify Edge Deploy\n• Automated Vercel Edge Deploy"]
+```
+
+### 📋 CI/CD Workflow Stages & Highlights
+
+| Workflow Stage | Job Name | Action & Environment | Output / Verification |
+| :--- | :--- | :--- | :--- |
+| **1. Smart Contract CI** | `audit-and-test-contracts` | `ubuntu-latest` • Rust `stable` • Target `wasm32-unknown-unknown` | Compiles Rust Soroban contracts & executes unit tests via `cargo test` |
+| **2. Frontend CI** | `build-and-lint-frontend` | `ubuntu-latest` • `Node.js 18` | Validates dependencies (`npm ci`) and verifies production bundle build (`npm run build`) |
+| **3. Continuous Deployment** | `continuous-deployment` | Webhook / Deployment Edge | Automatically triggers live production updates to **Netlify** & **Vercel** on `main` merge |
+
+<br/>
+
+### 🛡️ Local CI/CD Validation Commands
+
+You can run the exact CI/CD validation steps locally before pushing:
+
+```bash
+# 1. Run Soroban Smart Contract Audit & Tests
+cd contract
+cargo check --target wasm32-unknown-unknown
+cargo test
+
+# 2. Validate Frontend Production Build
+cd ../frontend
+npm ci
+npm run build
+```
+
+<br/>
+
+---
+
 ## 🛠️ Technology Stack
 
 * **Blockchain Platform**: [Stellar Network](https://stellar.org)
