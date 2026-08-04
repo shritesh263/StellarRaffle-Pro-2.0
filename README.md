@@ -33,13 +33,13 @@
 
 ---
 
-## 👛 Integrated Wallet Connectivity (8 Supported Wallets)
+## 👛 Integrated Wallet Connectivity (12 Supported Wallets)
 
-StellarRaffle Pro 2.0 features full multi-wallet connection support across browser extensions, web authentication, and mobile deep links:
+StellarRaffle Pro 2.0 features full multi-wallet connection support across browser extensions, web authentication, hardware keys, and mobile deep links:
 
 | # | Wallet Provider | Connection Type | Supported Platform | Status |
 |:-:| :--- | :--- | :--- | :-: |
-| 1 | **Freighter** | Browser Extension | Chrome, Firefox, Brave, Edge | ✅ Active |
+| 1 | **Freighter** | Official Extension | Chrome, Firefox, Brave, Edge | ✅ Active |
 | 2 | **Albedo** | Web Link / Popup | Web (Zero Extension Required) | ✅ Active |
 | 3 | **xBull** | Extension & Mobile | Web, Android, iOS | ✅ Active |
 | 4 | **Rabet** | Desktop / Extension | Desktop & Chrome Extension | ✅ Active |
@@ -47,8 +47,12 @@ StellarRaffle Pro 2.0 features full multi-wallet connection support across brows
 | 6 | **Lobstr** | Mobile Wallet | iOS, Android | ✅ Active |
 | 7 | **Hana Wallet** | Multichain Extension | Web Browsers | ✅ Active |
 | 8 | **LOBSTR Mobile** | Direct Deep-Link | Mobile Devices | ✅ Active |
+| 9 | **StellarX** | DEX Portal Session | Web Browsers | ✅ Active |
+| 10 | **Solar Wallet** | Desktop & Mobile Client | Windows, macOS, Linux, Mobile | ✅ Active |
+| 11 | **VaultKey** | USB Hardware Security Key | Hardware Devices | ✅ Active |
+| 12 | **StellarTerm** | Web Client Session | Web Browsers | ✅ Active |
 
-> ℹ️ *All 8 wallet options are accessible directly via the top right **CONNECT WALLET** button across all 10 integrated views.*
+> ℹ️ *All 12 wallet options are accessible directly via the top right **CONNECT WALLET** button across all integrated views.*
 
 <br/>
 
@@ -75,13 +79,33 @@ The platform merges **10 distinct Stitch UI designs** into a single seamless, ze
 
 ---
 
+## 🚀 Pro Features Expansion (React Frontend — 7-Tab Dashboard)
+
+The **React frontend** (`/frontend`) provides a full-featured 7-tab dashboard wired directly to the Soroban smart contract via `useContract`. All 8 additive Pro components are now fully integrated under the **🚀 Pro Features** tab:
+
+| Component | Feature Description | Contract Method Used |
+| :--- | :--- | :--- |
+| **🏦 VaultTracker** | Live prize pool size, tickets sold, current round #, and animated vault progress bar (updates every 10s). | `get_raffle_info` |
+| **⏱️ CountdownTimer** | Real blockchain-sourced countdown to next draw. Shows "Draw in progress..." spinner when deadline hits (polls every 30s). | `get_raffle_info` |
+| **🎯 OddsCalculator** | Real-time winning probability — your tickets vs. total tickets sold (updates every 15s). | `get_raffle_info`, `get_user_stats` |
+| **🔥 StreakBonus** | Displays your consecutive participation streak with an animated progress bar. Awards bonus ticket every 5 rounds. | `get_user_stats` |
+| **🎟️ MultiTicketPurchase** | Slider-based bulk ticket purchase (1–50 tickets) with **10% automatic discount** when buying 10+ tickets, connected to Soroban `buy_tickets`. | `buy_tickets` (write) |
+| **📋 MyTicketsDashboard** | Full portfolio view — XLM invested, rounds entered, wins confirmed, and ticket table. Supports **CSV export** of your entry history. | `get_user_stats` |
+| **📜 DrawHistory** | On-chain verified winners table with direct links to **Stellar Expert explorer** for each winner address and transaction hash. | `get_history` |
+| **🏆 Leaderboard** | Global rankings with two modes: **Biggest Win** (by XLM) and **Top Buyers** (by tickets). Connected wallet highlighted in indigo. | Simulated (mock data) |
+
+<br/>
+
+---
+
 ## 🌟 Level 5 Certification Requirements & Deliverables
 
 | Deliverable Requirement | Location / Link | Verification Status |
 | :--- | :--- | :---: |
 | **👥 User Growth (50+ Testnet Users)** | [52 Verified Testnet Users Dataset (User.csv.csv)](./User.csv.csv) | ✅ 52 Real Users |
 | **🎨 Integrated 10-Screen SPA** | [Stitch Pro 2.0 SPA (`index.html`)](./stitch_stellar_raffle_pro/index.html) | ✅ 10 Views Live |
-| **👛 Multi-Wallet Adapter (8 Options)** | Freighter, Albedo, xBull, Rabet, WalletConnect, Lobstr, Hana, LOBSTR Mobile | ✅ 8 Wallets Integrated |
+| **👛 Multi-Wallet Adapter (12 Options)** | Freighter, Albedo, xBull, Rabet, WalletConnect, Lobstr, Hana, LOBSTR Mobile, StellarX, Solar, VaultKey, StellarTerm | ✅ 12 Wallets Integrated |
+| **🚀 Pro Features Expansion** | VaultTracker, CountdownTimer, OddsCalculator, StreakBonus, MultiTicketPurchase, MyTicketsDashboard, DrawHistory, Leaderboard | ✅ 8 Features Live |
 | **📊 Product Presentation & Pitch Deck** | [Level 5 Pitch Deck (`PITCH_DECK.md`)](./PITCH_DECK.md) | ✅ Complete Slides |
 | **🎥 Product Demo & Video Walkthrough** | [Demo Script & User Flow (`DEMO_WALKTHROUGH.md`)](./DEMO_WALKTHROUGH.md) | ✅ Full Script & Guide |
 | **💻 Live Netlify Deployment** | **[🚀 LIVE NETLIFY DEPLOYMENT LINK](https://ubiquitous-cactus-2ad118.netlify.app/)** | ✅ Live Online |
@@ -167,9 +191,9 @@ Our platform integrates authentic community feedback from our **52 verified Stel
 
 <br/>
 
-### 👛 7. Universal 8-Wallet Connectivity Modal
+### 👛 7. Universal 12-Wallet Connectivity Modal
 ![Wallet Connection](./SCREENSHOT/SUI-7.png)
-*Native integration for Freighter, Albedo, xBull, Rabet, WalletConnect, Lobstr, Hana Wallet, and LOBSTR Mobile.*
+*Native integration for Freighter, Albedo, xBull, Rabet, WalletConnect, Lobstr, Hana Wallet, LOBSTR Mobile, StellarX, Solar Wallet, VaultKey, and StellarTerm.*
 
 <br/>
 
@@ -244,7 +268,9 @@ npm run build
 
 * **Blockchain Platform**: [Stellar Network](https://stellar.org)
 * **Smart Contract Framework**: [Soroban SDK (Rust)](https://soroban.stellar.org)
-* **Frontend**: HTML5, Vanilla JavaScript (ES6+ SPA Router), Tailwind CSS CDN
+* **SPA Frontend**: HTML5, Vanilla JavaScript (ES6+ SPA Router), Tailwind CSS CDN — [`stitch_stellar_raffle_pro/index.html`](./stitch_stellar_raffle_pro/index.html)
+* **React Frontend**: React 19 + Vite 8, TypeScript-compatible JSX/TSX, `@stellar/stellar-sdk` — [`frontend/`](./frontend/)
+* **Pro Feature Components**: `VaultTracker`, `CountdownTimer`, `OddsCalculator`, `StreakBonus`, `MultiTicketPurchase`, `MyTicketsDashboard`, `DrawHistory`, `Leaderboard`
 * **Typography**: Sora (Headers), Inter (Body), Geist (Monospaced Technical Data)
 * **Design System**: Deep Space Glassmorphic (#10131A midnight background, Electric Violet, Cyber Cyan, Orbit Gold accents)
 
@@ -260,12 +286,24 @@ npm run build
    cd StellarRaffle-Pro-2.0
    ```
 
-2. **Run Integrated SPA Locally**:
+2. **Run Integrated SPA Locally** (10-Screen Stitch UI):
    Simply open `stitch_stellar_raffle_pro/index.html` in any web browser, or spin up a local server using Vite:
    ```bash
    npx vite stitch_stellar_raffle_pro
    ```
    Access at `http://localhost:5173/`
+
+3. **Run React Frontend with Pro Features** (7-Tab Dashboard including VaultTracker, CountdownTimer, Leaderboard, etc.):
+   ```bash
+   cd frontend
+   cp .env.example .env   # add your VITE_CONTRACT_ID
+   npm install
+   npm run dev
+   ```
+   Access at `http://localhost:5173/`
+
+   > **Pro Features Tab** (`🚀 Pro Features`) contains all 8 additive Soroban expansion components.
+   > Connect your Freighter wallet to see live winning odds, streak bonuses, and your ticket portfolio.
 
 <br/>
 

@@ -9,6 +9,16 @@ import MetricsDashboard from './components/MetricsDashboard';
 import Monitoring from './components/Monitoring';
 import DataIndex from './components/DataIndex';
 
+// ── New Pro Expansion Feature Components ────────────────────────────
+import VaultTracker from './components/VaultTracker';
+import CountdownTimer from './components/CountdownTimer';
+import OddsCalculator from './components/OddsCalculator';
+import MultiTicketPurchase from './components/MultiTicketPurchase';
+import MyTicketsDashboard from './components/MyTicketsDashboard';
+import DrawHistory from './components/DrawHistory';
+import StreakBonus from './components/StreakBonus';
+import Leaderboard from './components/Leaderboard';
+
 import { useFreighter } from './hooks/useFreighter';
 import { useStellar } from './hooks/useStellar';
 
@@ -24,7 +34,7 @@ function App() {
 
   const [alert, setAlert] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
-  const [activeTab, setActiveTab] = useState('play'); // 'play', 'history', 'referral'
+  const [activeTab, setActiveTab] = useState('play'); // 'play', 'history', 'referral', 'metrics', 'monitoring', 'indexing', 'features'
   const [selectedTier, setSelectedTier] = useState('Bronze');
   const [history, setHistory] = useState([]);
 
@@ -103,6 +113,14 @@ function App() {
             onClick={() => setActiveTab('indexing')}
           >
             🗃️ Index
+          </button>
+          {/* ── Pro Expansion Tab ── */}
+          <button 
+            className={`tab-btn ${activeTab === 'features' ? 'active' : ''}`}
+            onClick={() => setActiveTab('features')}
+            style={activeTab === 'features' ? {} : { borderColor: 'rgba(99,102,241,0.4)' }}
+          >
+            🚀 Pro Features
           </button>
         </div>
       </div>
@@ -214,6 +232,47 @@ function App() {
           {activeTab === 'metrics' && <MetricsDashboard />}
           {activeTab === 'monitoring' && <Monitoring />}
           {activeTab === 'indexing' && <DataIndex />}
+
+          {/* ── Pro Features Expansion Tab ─────────────────────────────────── */}
+          {activeTab === 'features' && (
+            <div className="animate-in" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+
+              {/* Section Header */}
+              <div style={{ paddingBottom: '1rem', borderBottom: '1px solid rgba(99,102,241,0.2)' }}>
+                <h2 style={{ fontSize: '1.75rem', fontWeight: 800, margin: 0 }}>
+                  🚀 Pro Expansion Features
+                </h2>
+                <p className="subtitle" style={{ marginTop: '0.4rem' }}>
+                  Additive Soroban features — Live vault tracker, countdown, odds engine, bulk purchase, portfolio &amp; leaderboard
+                </p>
+              </div>
+
+              {/* Streak Bonus (only shows when wallet connected + streak > 0) */}
+              <StreakBonus />
+
+              {/* Row 1: Vault Tracker (full width) */}
+              <VaultTracker />
+
+              {/* Row 2: Countdown + Odds Calculator side by side */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+                <CountdownTimer />
+                <OddsCalculator />
+              </div>
+
+              {/* Row 3: Bulk Ticket Purchase */}
+              <MultiTicketPurchase />
+
+              {/* Row 4: My Tickets + Draw History side by side */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+                <MyTicketsDashboard />
+                <DrawHistory />
+              </div>
+
+              {/* Row 5: Global Leaderboard (full width) */}
+              <Leaderboard />
+
+            </div>
+          )}
         </main>
 
         <aside style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
@@ -232,4 +291,3 @@ function App() {
 }
 
 export default App;
-
