@@ -1,7 +1,7 @@
 #![no_std]
 
-// raffle.rs contains the UniversalRaffle expansion contract (not re-exported, kept for reference)
-mod raffle;
+#[cfg(test)]
+mod test;
 
 use soroban_sdk::{
     contract, contractimpl, contracttype, token, Address, Env, Vec,
