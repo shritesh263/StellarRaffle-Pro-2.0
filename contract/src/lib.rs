@@ -1,7 +1,10 @@
 #![no_std]
+
+// raffle.rs contains the UniversalRaffle expansion contract (not re-exported, kept for reference)
 mod raffle;
+
 use soroban_sdk::{
-    contract, contractimpl, contracttype, token, Address, Env, Vec, Option,
+    contract, contractimpl, contracttype, token, Address, Env, Vec,
 };
 
 #[contracttype]
@@ -55,17 +58,23 @@ impl ProfessionalRaffle {
     /// Buy a ticket for a raffle tier with optional referral.
     /// - Platform fee: 5% of price goes to vault
     /// - Referral bonus: 1% of price paid to referrer (deducted from vault)
-    /// - Self-referral is silently ignored
-    pub fn buy_ticket(env: Env, buyer: Address, tier: TicketTier, referrer: Option<Address>) {
+    /// - Self-referral is silently ignored (no reward given)
+    pub fn buy_ticket(
+        env: Env,
+        buyer: Address,
+        tier: TicketTier,
+        referrer: core::option::Option<Address>,
+    ) {
         buyer.require_auth();
         let deadline: u64 = env.storage().instance().get(&DataKey::Deadline).unwrap();
         if env.ledger().timestamp() >= deadline {
             panic!("Lottery draw is in progress or ended.");
         }
-        let price = match tier {
-            TicketTier::Bronze => 5_000_000i128,
-            TicketTier::Gold => 20_000_000i128,
-            TicketTier::Diamond => 50_000_000i128,
+
+        let price: i128 = match tier {
+            TicketTier::Bronze => 5_000_000,
+            TicketTier::Gold => 20_000_000,
+            TicketTier::Diamond => 50_000_000,
         };
         let entries: u32 = match tier {
             TicketTier::Bronze => 1,
@@ -75,26 +84,34 @@ impl ProfessionalRaffle {
 
         let token_addr: Address = env.storage().instance().get(&DataKey::Token).unwrap();
         let token_client = token::Client::new(&env, &token_addr);
+
+        // Buyer pays price to contract
         token_client.transfer(&buyer, &env.current_contract_address(), &price);
 
-        // Platform fee (5%) goes to vault
+        // Platform fee (5%) credited to vault
         let platform_fee = (price * PLATFORM_FEE_BPS) / 10_000;
         let current_vault: i128 = env.storage().instance().get(&DataKey::VaultBalance).unwrap();
         let mut new_vault = current_vault + platform_fee;
 
-        // Referral reward (1%) — blocked if same as buyer (self-referral)
-        if let Some(ref ref_addr) = referrer {
+        // Referral reward (1%) — blocked for self-referral
+        if let core::option::Option::Some(ref ref_addr) = referrer {
             if ref_addr != &buyer {
                 let referral_reward = (price * REFERRAL_FEE_BPS) / 10_000;
-                // Pay referral from contract balance (deduct from vault)
+                // Deduct referral reward from vault, pay directly to referrer
                 new_vault -= referral_reward;
-                token_client.transfer(&env.current_contract_address(), ref_addr, &referral_reward);
+                token_client.transfer(
+                    &env.current_contract_address(),
+                    ref_addr,
+                    &referral_reward,
+                );
             }
         }
 
         env.storage().instance().set(&DataKey::VaultBalance, &new_vault);
 
-        let mut participants: Vec<Address> = env.storage().instance().get(&DataKey::Participants).unwrap();
+        // Add buyer's entries to participants list
+        let mut participants: Vec<Address> =
+            env.storage().instance().get(&DataKey::Participants).unwrap();
         for _ in 0..entries {
             participants.push_back(buyer.clone());
         }
@@ -106,12 +123,14 @@ impl ProfessionalRaffle {
         if env.ledger().timestamp() < deadline {
             panic!("Ongoing");
         }
-        let participants: Vec<Address> = env.storage().instance().get(&DataKey::Participants).unwrap();
+        let participants: Vec<Address> =
+            env.storage().instance().get(&DataKey::Participants).unwrap();
         let count = participants.len();
         if count == 0 {
             panic!("No players");
         }
 
+        // Pseudo-random winner selection via ledger timestamp
         let winner_idx = (env.ledger().timestamp() % (count as u64)) as u32;
         let winner = participants.get(winner_idx).unwrap();
 
@@ -119,13 +138,15 @@ impl ProfessionalRaffle {
         let token_client = token::Client::new(&env, &token_addr);
         let vault_bal: i128 = env.storage().instance().get(&DataKey::VaultBalance).unwrap();
         let total_bal = token_client.balance(&env.current_contract_address());
+        // Prize = total holdings minus reserved vault (platform fees)
         let prize = total_bal - vault_bal;
 
         if prize > 0 {
             token_client.transfer(&env.current_contract_address(), &winner, &prize);
         }
 
-        let mut history: Vec<WinnerRecord> = env.storage().instance().get(&DataKey::History).unwrap();
+        let mut history: Vec<WinnerRecord> =
+            env.storage().instance().get(&DataKey::History).unwrap();
         history.push_back(WinnerRecord {
             winner: winner.clone(),
             amount: prize,
@@ -135,8 +156,14 @@ impl ProfessionalRaffle {
             history.remove(0);
         }
         env.storage().instance().set(&DataKey::History, &history);
-        env.storage().instance().set(&DataKey::Participants, &Vec::<Address>::new(&env));
-        env.storage().instance().set(&DataKey::Deadline, &(env.ledger().timestamp() + 3600));
+
+        // Reset for next round
+        env.storage()
+            .instance()
+            .set(&DataKey::Participants, &Vec::<Address>::new(&env));
+        env.storage()
+            .instance()
+            .set(&DataKey::Deadline, &(env.ledger().timestamp() + 3600));
     }
 
     /// Owner withdraws accumulated platform fees from the vault
@@ -154,15 +181,23 @@ impl ProfessionalRaffle {
         }
     }
 
+    /// Returns (pool_net, participants_count, deadline_timestamp, vault_balance)
     pub fn get_raffle_info(env: Env) -> (i128, u32, u64, i128) {
-        let vault_bal: i128 = env.storage().instance().get(&DataKey::VaultBalance).unwrap_or(0);
+        let vault_bal: i128 = env
+            .storage()
+            .instance()
+            .get(&DataKey::VaultBalance)
+            .unwrap_or(0);
         let participants: Vec<Address> = env
             .storage()
             .instance()
             .get(&DataKey::Participants)
             .unwrap_or(Vec::new(&env));
-        let deadline: u64 = env.storage().instance().get(&DataKey::Deadline).unwrap_or(0);
-        // Return (pool_net, participants_count, deadline, vault_balance)
+        let deadline: u64 = env
+            .storage()
+            .instance()
+            .get(&DataKey::Deadline)
+            .unwrap_or(0);
         (0i128, participants.len(), deadline, vault_bal)
     }
 
