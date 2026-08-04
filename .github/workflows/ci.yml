@@ -12,17 +12,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Codebase
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Rust Toolchain & Target
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
-          target: wasm32-unknown-unknown
-          override: true
+          targets: wasm32-unknown-unknown
 
       - name: Cache Cargo Dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/bin/
@@ -30,17 +28,16 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             contract/target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-cargo-${{ hashFiles('contract/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
 
-      - name: Install Soroban CLI
-        run: cargo install --locked soroban-cli || true
-
-      - name: Run Cargo Check
+      - name: Run Cargo Check (wasm32)
         run: |
           cd contract
           cargo check --target wasm32-unknown-unknown
 
-      - name: Execute Soroban Unit Tests & Snapshots
+      - name: Execute Soroban Unit Tests
         run: |
           cd contract
           cargo test
@@ -55,12 +52,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Codebase
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js Environment
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
           cache: 'npm'
           cache-dependency-path: frontend/package-lock.json
 
@@ -81,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Codebase
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Deploy Confirmation & Status Check
         run: |
