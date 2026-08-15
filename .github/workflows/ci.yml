@@ -17,36 +17,23 @@ jobs:
       - name: Install Rust Stable Toolchain
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Add wasm32 Target
-        run: rustup target add wasm32-unknown-unknown
-
       - name: Cache Cargo Dependencies
-        uses: actions/cache@v4
+        uses: Swatinem/rust-cache@v2
         with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            contract/target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('contract/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-
+          workspaces: contract -> contract/target
 
-      - name: Run Cargo Check (wasm32)
-        run: |
-          cd contract
-          cargo check --target wasm32-unknown-unknown
+      - name: Install Stellar CLI
+        run: cargo install --locked stellar-cli --features opt
 
       - name: Execute Soroban Unit Tests
         run: |
           cd contract
           cargo test
 
-      - name: Build WASM Bytecode Artifact
+      - name: Build Contract (stellar contract build)
         run: |
           cd contract
-          cargo build --target wasm32-unknown-unknown --release
+          stellar contract build
 
   build-and-lint-frontend:
     name: ⚡ Frontend Build & Lint CI
