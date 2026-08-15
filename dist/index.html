@@ -8,25 +8,37 @@
 <script src="https://unpkg.com/@stellar/freighter-api@6.0.1/dist/index.min.js"></script>
 <script src="https://unpkg.com/@albedo-link/intent/lib/albedo.intent.js"></script>
 <script src="https://unpkg.com/@xbull/wallet-connect@latest/dist/index.umd.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=Geist:wght@400;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=Geist:wght@400;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <style>
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
             vertical-align: middle;
         }
-        .glass-panel {
+        .glass-panel, .glass-card {
             background: rgba(29, 32, 38, 0.6);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(149, 142, 160, 0.2);
             border-top: 1px solid rgba(208, 188, 255, 0.3);
         }
-        .glass-panel:hover {
+        .glass-panel:hover, .glass-card:hover {
             border-color: rgba(208, 188, 255, 0.4);
         }
         .glow-primary { box-shadow: 0 0 20px rgba(208, 188, 255, 0.15); }
         .glow-secondary { box-shadow: 0 0 20px rgba(76, 215, 246, 0.15); }
         .progress-glow { box-shadow: 0 0 15px rgba(208, 188, 255, 0.4); }
         
+        .stellar-pulse {
+            position: absolute;
+            background: radial-gradient(circle, rgba(143, 245, 255, 0.2) 0%, rgba(11, 14, 20, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: pulse-glow 6s infinite ease-in-out;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); opacity: 0.4; }
+            50% { transform: scale(1.15); opacity: 0.8; }
+        }
+
         @keyframes ticker {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
