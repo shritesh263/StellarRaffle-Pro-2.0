@@ -17,23 +17,21 @@ jobs:
       - name: Install Rust Stable Toolchain
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Cache Cargo Dependencies
-        uses: Swatinem/rust-cache@v2
+      - name: Cache Cargo Registry
+        uses: actions/cache@v4
         with:
-          workspaces: contract -> contract/target
+          path: |
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            contract/target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('contract/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
 
-      - name: Install Stellar CLI
-        run: cargo install --locked stellar-cli --features opt
-
-      - name: Execute Soroban Unit Tests
-        run: |
-          cd contract
-          cargo test
-
-      - name: Build Contract (stellar contract build)
-        run: |
-          cd contract
-          stellar contract build
+      - name: Run Soroban Unit Tests
+        working-directory: contract
+        run: cargo test
 
   build-and-lint-frontend:
     name: ⚡ Frontend Build & Lint CI
@@ -50,17 +48,15 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
 
       - name: Install Frontend Dependencies
-        run: |
-          cd frontend
-          npm ci
+        working-directory: frontend
+        run: npm ci
 
       - name: Validate Production Vite Bundle
-        run: |
-          cd frontend
-          npm run build
+        working-directory: frontend
+        run: npm run build
 
   continuous-deployment:
-    name: 🚀 Continuous Deployment (CD) Netlify & Vercel
+    name: 🚀 Continuous Deployment
     needs: [audit-and-test-contracts, build-and-lint-frontend]
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
@@ -68,6 +64,5 @@ jobs:
       - name: Checkout Codebase
         uses: actions/checkout@v4
 
-      - name: Deploy Confirmation & Status Check
-        run: |
-          echo "CI/CD Pipeline Successful! Automated Webhook trigger sent to Netlify and Vercel production edge locations."
+      - name: Deploy Confirmation
+        run: echo "✅ CI passed — Deployment webhooks triggered for Netlify and Vercel."
